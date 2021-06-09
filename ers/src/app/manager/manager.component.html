@@ -1,0 +1,17 @@
+<h1>
+    Manager Home
+</h1>
+
+<button (click) = "getAllEmployees()">All Employees</button>
+
+<table>
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+    </tr>
+    <tr *ngFor="let employee of employees">
+        <td>{{employee._id}}</td>
+        <td>{{employee.first_name}} {{employee.last_name}}</td>
+    </tr>
+
+</table>
