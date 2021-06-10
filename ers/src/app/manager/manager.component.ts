@@ -10,15 +10,55 @@ export class ManagerComponent implements OnInit {
 
   constructor(private managerService: ManagerService) { }
 
-  employees = []
+  tableView ="";
+  data = [];
 
   ngOnInit(): void {
+    this.getAllEmployees()
 
   }
-  getAllEmployees(){
-    this.managerService.getAllEmployees().subscribe((data)=>{
-      this.employees = data;
+  getAllEmployees() {
+    this.managerService.getAllEmployees().subscribe((data) => {
+      if (data.success) {
+        console.log(data);
+        this.data = data.data;
+        this.tableView = "employees"
+      }
     })
-
   }
+  getAllPending() {
+    this.managerService.getAllPending().subscribe((data) => {
+      if(data.success){
+        this.data = data.data;
+        this.tableView = "pending"
+      }
+    })
+  }
+  getAllResolved(){
+    this.managerService.getAllResolved().subscribe((data) => {
+      if(data.success){
+        this.data = data.data;
+        this.tableView = "resolved"
+      }
+    })
+  }
+  getAllRequestsByEmployee(id:any){
+    this.managerService.getAllRequestsByEmployee(id).subscribe((data) => {
+      if(data.success){
+        this.data = data.data;
+        this.tableView = "employeeRequests"
+      }
+    })
+  } 
+  resolveRequest(decision, reimbursement){
+    console.log(decision, reimbursement);
+    
+    this.managerService.resolveRequest({reimbursement, decision,}).subscribe((data) =>{
+      if(data.success){
+        if(decision === 'accept'){document.getElementById(reimbursement).innerHTML = "Accepted"}
+        if(decision === 'reject'){document.getElementById(reimbursement).innerHTML = "Rejected"}
+      }
+    })
+  }
+
 }

@@ -2,16 +2,58 @@
     Manager Home
 </h1>
 
-<button (click) = "getAllEmployees()">All Employees</button>
+<button (click)="getAllEmployees()">All Employees</button>
+<button (click)="getAllPending()">All Pending Requests</button>
+<button (click)="getAllResolved()">All Resolved Requests</button>
 
-<table>
-    <tr>
-        <td>ID</td>
-        <td>Name</td>
-    </tr>
-    <tr *ngFor="let employee of employees">
-        <td>{{employee._id}}</td>
-        <td>{{employee.first_name}} {{employee.last_name}}</td>
-    </tr>
+<div [ngSwitch]="tableView">
 
-</table>
+    <!-- All Employees Table -->
+    <table *ngSwitchCase="'employees'">
+        <tr>
+            <td>ID</td>
+            <td>Name</td>
+        </tr>
+        <tr *ngFor="let employee of data">
+            <td>{{employee._id}}</td>
+            <td>{{employee.first_name}} {{employee.last_name}}</td>
+            <!-- <td><button>Requests</button></td> -->
+        </tr>
+    </table>
+
+    <!-- Pending Requests Table -->
+    <table *ngSwitchCase="'pending'">
+        <tr>
+            <td>Request ID</td>
+            <td>Amount Requested</td>
+            <td>Reason</td>
+            <td>Employee Requesting</td>   
+        </tr>
+        <tr *ngFor="let request of data">
+            <!-- [(ngModel)] = request._id -->
+            <td>{{request._id}}</td>
+            <td>{{request.amount}}</td>
+            <td>{{request.reason}}</td>
+            <td>{{request.employee_id}}</td>
+            <td id={{request._id}}><button (click)="resolveRequest('accept', request._id)">Accept</button><button button (click)="resolveRequest('reject', request._id)">Reject</button></td>
+        </tr>
+    </table>
+
+    <!-- Resolved Requests Table -->
+    <table *ngSwitchCase="'resolved'">
+        <tr>
+            <td>Request ID</td>
+            <td>Amount Requested</td>
+            <td>Reason</td>
+            <td>Employee Requesting</td>
+            <td>Status</td>
+        </tr>
+        <tr *ngFor="let request of data">
+            <td>{{request._id}}</td>
+            <td>{{request.amount}}</td>
+            <td>{{request.reason}}</td>
+            <td>{{request.employee_id}}</td>
+            <td>{{request.status}}</td>
+        </tr>
+    </table>
+</div>

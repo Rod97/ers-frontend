@@ -11,6 +11,10 @@ export class EmployeeComponent implements OnInit {
   baseurl = 'https://ers-backend.herokuapp.com';
   constructor(private http: HttpClient) { }
 
+  name: string = ""
+  amount: number = 0.0
+  reason: string = ""
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
@@ -23,23 +27,28 @@ export class EmployeeComponent implements OnInit {
     else if (id === "New") return "60bfcc68a2c83f20c1b26943"
   }
 
-  submit(amo: number, rea: string, nam: string) {
+  submit() {
     let info = {
-      amount: amo,
-      reason: rea,
-      name: this.register(nam)
+      amount: this.amount,
+      reason: this.reason,
+      name: this.register(this.name)
     }
-    return this.http.post(`${this.baseurl}request`, JSON.stringify(info), this.httpOptions)
+    this.http.post<any>(`${this.baseurl}request`, JSON.stringify(info), this.httpOptions).subscribe((data)=>{
+      if(data.success) document.getElementById("success").innerHTML = "Reimbursement submitted successfully!"
+    })
   }
 
-  pending(id: string) {
-    if (id === "Employee") return this.http.post(`${this.baseurl}pending/60bf9637bc4289f9fc1c3282`, this.httpOptions)
-    else if (id === "New") return this.http.post(`${this.baseurl}pending/60bfcc68a2c83f20c1b26943`, this.httpOptions)
+  pending() {
+    this.http.get<any>(`${this.baseurl}pending/${this.register(this.name)}`, this.httpOptions).subscribe((data)=>{
+      if(data.success) document.getElementById("success").innerHTML = data
+      else document.getElementById("success").innerHTML = "You have no reimbursements to display!"
+    })
   }
 
-  resolved(id: string) {
-    if (id === "Employee") return this.http.post(`${this.baseurl}resolved/60bf9637bc4289f9fc1c3282`, this.httpOptions)
-    else if (id === "New") return this.http.post(`${this.baseurl}resolved/60bfcc68a2c83f20c1b26943`, this.httpOptions)
+  resolved() {
+    this.http.get<any>(`${this.baseurl}resolved/${this.register(this.name)}`, this.httpOptions).subscribe((data)=>{
+      if(data.success) document.getElementById("success").innerHTML = data
+      else document.getElementById("success").innerHTML = "You have no reimbursements to display!"
+    })
   }
-
 }

@@ -1,0 +1,30 @@
+#requestform{
+    float:left;
+    width: 48%;
+    border-style: solid;
+    border-width: thick;
+    margin: 9px;
+}
+#viewrequests{
+    float:right;
+    width: 48%;
+    border-style: solid;
+    border-width: thick;
+    margin: 9px;
+}
+#pending{
+    float:left;
+    width: 50%;
+}
+#resolved{
+    float:right;
+    width: 50%;
+}
+footer {
+    bottom: 0%;
+    right: 40%;
+    position: fixed;
+    padding: 10px 20px;
+    color: white;
+    background-color: grey;
+}
