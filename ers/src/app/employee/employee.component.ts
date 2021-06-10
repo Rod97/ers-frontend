@@ -14,6 +14,10 @@ export class EmployeeComponent implements OnInit {
   name: string = ""
   amount: number = 0.0
   reason: string = ""
+  names = [
+    "Employee",
+    "New"
+  ]
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
