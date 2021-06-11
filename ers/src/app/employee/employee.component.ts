@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ManagerService } from '../manager/manager.service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-employee',
@@ -8,51 +10,83 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class EmployeeComponent implements OnInit {
 
-  baseurl = 'https://ers-backend.herokuapp.com';
-  constructor(private http: HttpClient) { }
+  baseurl = 'https://ers-node.herokuapp.com/employee/';
+  constructor(private http: HttpClient, private manager: ManagerService, private currencyPipe: CurrencyPipe) { }
 
-  name: string = ""
-  amount: number = 0.0
-  reason: string = ""
-  names = [
-    "Employee",
-    "New"
-  ]
+  id;
+  amount;
+  amountPlaceholder = 0;
+  reason;
+  names = [];
+  data = [];
+  tableView = '';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
 
   ngOnInit(): void {
+    this.manager.getAllEmployees().subscribe(data => {
+      let employees = data.data
+      for (let employee of employees) {
+        this.names.push({ name: employee.first_name + " " + employee.last_name, id: employee._id })
+      }
+    });
   }
 
-  register(id: string): string {
-    if (id === "Employee") return "60bf9637bc4289f9fc1c3282"
-    else if (id === "New") return "60bfcc68a2c83f20c1b26943"
-  }
 
   submit() {
     let info = {
       amount: this.amount,
       reason: this.reason,
-      name: this.register(this.name)
+      employee_id: this.id,
+      status: 'pending'
     }
-    this.http.post<any>(`${this.baseurl}request`, JSON.stringify(info), this.httpOptions).subscribe((data)=>{
-      if(data.success) document.getElementById("success").innerHTML = "Reimbursement submitted successfully!"
+
+    console.log(info);
+
+    this.http.post<any>(`${this.baseurl}request`, JSON.stringify(info), this.httpOptions).subscribe((data) => {
+      console.log(data.success);
+
+      if (data.success) document.getElementById("success").innerHTML = "Reimbursement submitted successfully!"
     })
   }
 
   pending() {
-    this.http.get<any>(`${this.baseurl}pending/${this.register(this.name)}`, this.httpOptions).subscribe((data)=>{
-      if(data.success) document.getElementById("success").innerHTML = data
-      else document.getElementById("success").innerHTML = "You have no reimbursements to display!"
+    this.http.get<any>(`${this.baseurl}pending/${this.id}`, this.httpOptions).subscribe((data) => {
+      console.log("pending",data);
+      console.log();
+      
+      if (data.success && data.data.length !== 0) {
+        this.data = data.data
+        this.tableView = 'pending'
+      } else {
+        alert("No requests found for employee")
+        this.data=[]
+        this.tableView = ""
+      }
     })
   }
 
   resolved() {
-    this.http.get<any>(`${this.baseurl}resolved/${this.register(this.name)}`, this.httpOptions).subscribe((data)=>{
-      if(data.success) document.getElementById("success").innerHTML = data
-      else document.getElementById("success").innerHTML = "You have no reimbursements to display!"
+
+    this.http.get<any>(`${this.baseurl}resolved/${this.id}`, this.httpOptions).subscribe((data) => {
+
+      if (data.success && data.data.length !== 0) {
+        this.data = data.data
+        this.tableView = 'resolved'
+      }
+      else {
+        alert("No requests found for employee")
+        this.data=[]
+        this.tableView = ""
+      }
     })
+  }
+
+  format(){
+    if(this.amount){
+      this.amount = this.currencyPipe.transform(this.amount.replace(/\D/g, '').replace(/^0+/,''),'USD', 'symbol', '1.0-0')
+    }
   }
 }

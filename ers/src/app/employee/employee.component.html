@@ -1,50 +1,94 @@
-<body style="background-image: url('../../assets/nodebackground.jpg')">
-    <h1 style="text-align: center">Welcome, {{name}}!!</h1>
-    <br> <br> <br> <br> <br>
-    <div id="requestform">
-        <h3 style="text-align: center">Submit A Request</h3>
-        <form #form='ngForm'>
-            <div class="form-group">
-                <option *ngFor="let name of names" [value]="name">
-                  {{ name }}
-                </option>
-                <input type="text" class="form-control" name="name" placeholder="name" [(ngModel)]="name" required />
-            </div>
+<h1 style="margin-left: 30px;">Employee Home</h1>
+<form class="form-inline">
+
+    <label for=id class="first">Employee</label>
+    <select name="id" [(ngModel)]="id" style="margin-left:10px" class="custom-select">
+        <option value="" disabled selected>Select Employee</option>
+        <option *ngFor="let employee of names" value="{{employee.id}}">
+            {{ employee.name }}
+        </option>
+    </select>
+
+
+    <button class="btn btn-outline-secondary" (click)="tableView = 'request'">New Request</button>
+    <button class="btn btn-outline-secondary" (click)="pending()">My Pending Requests</button>
+    <button class="btn btn-outline-secondary" (click)="resolved()">My Resolved Requests</button>
+
+</form>
+
+<div class=row [ngSwitch]="tableView">
+
+    <!-- Submit Requests -->
+    <div class=col *ngSwitchCase="'request'">
+        <h3>Submit A Request</h3>
+        <form>
             <div class="form-group">
                 <label for="reason">Reason</label>
-                <input type="text" class="form-control" name="reason" placeholder="reason" [(ngModel)]="reason" required />
+                <input type="text" class="form-control" name="reason" placeholder="Reason" [(ngModel)]="reason"
+                    required />
             </div>
             <div class="form-group">
                 <label for="amount">Amount</label>
-                <input type="text" class="form-control" name="amount" placeholder="amount" [(ngModel)]="amount" required />
+                <input type="text" class="form-control" name="amount" placeholder="{{amountPlaceholder | currency}}"
+                    [(ngModel)]="amount" (keyup)=format() required />
             </div>
-            <br>
             <div id="submitbutton" style="text-align: center">
-                <button type="submit" style="text-align: center" class="btn btn-primary" (click)="submit()">Submit</button>
+                <button type="submit" style="text-align: center" class="btn btn-outline-secondary"
+                    (click)="submit()">Submit</button>
             </div>
             <div id="success" style="text-align: center"></div>
         </form>
     </div>
-    <div id="viewrequests">
-        <h3 style="text-align: center">Past Requests</h3>
-        <br> <br> <br>
-        <form>
-            <div class="form-group">
-                <option *ngFor="let name of names" [value]="name">
-                  {{ name }}
-                </option>
-                <input type="text" class="form-control" name="name" placeholder="name" [(ngModel)]="name" required />
+
+    <!-- View Requests -->
+    <div class=col>
+        <div id="view">
+            <!-- Pending Requests Table -->
+            <div *ngSwitchCase="'pending'">
+                <h5>Pending</h5>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Amount Requested</th>
+                            <th>Reason</th>
+                            <th>Employee Requesting</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of data">
+                            <!-- [(ngModel)] = request._id -->
+                            <td>{{request._id}}</td>
+                            <td>{{request.amount}}</td>
+                            <td>{{request.reason}}</td>
+                            <td>{{request.employee_id}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div id="pending" style="text-align: center">
-                <button type="button" style="text-align: right" class="btn btn-primary" (click)="pending()">Pending</button>
+            <div *ngSwitchCase="'resolved'">
+                <h5>Resolved</h5>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Amount Requested</th>
+                            <th>Reason</th>
+                            <th>Employee Requesting</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of data">
+                            <td>{{request._id}}</td>
+                            <td>{{request.amount}}</td>
+                            <td>{{request.reason}}</td>
+                            <td>{{request.employee_id}}</td>
+                            <td>{{request.status}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div id="resolved" style="text-align: center">
-                <button type="button" style="text-align: right" class="btn btn-primary" (click)="resolved()">Resolved</button>
-            </div>
-        </form>
-        <div id="view" style="text-align: center"></div>
+        </div>
     </div>
-</body>
-<footer>
-    <p> © 2021 All rights reserved.</p>
-</footer>
+</div>
