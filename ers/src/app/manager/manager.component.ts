@@ -55,8 +55,7 @@ export class ManagerComponent implements OnInit {
     
     this.managerService.resolveRequest({reimbursement, decision,}).subscribe((data) =>{
       if(data.success){
-        if(decision === 'accept'){document.getElementById(reimbursement).innerHTML = "Accepted"}
-        if(decision === 'reject'){document.getElementById(reimbursement).innerHTML = "Rejected"}
+        document.getElementById(reimbursement).innerHTML = decision
       }
     })
   }

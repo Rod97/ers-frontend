@@ -44,8 +44,8 @@
                 <td>{{request.reason}}</td>
                 <td>{{request.employee_id}}</td>
                 <td id={{request._id}}><button class="btn btn-primary"
-                        (click)="resolveRequest('accept', request._id)">Accept</button><button class="btn btn-primary"
-                        (click)="resolveRequest('reject', request._id)">Reject</button></td>
+                        (click)="resolveRequest('Accepted', request._id)">Accept</button><button class="btn btn-primary"
+                        (click)="resolveRequest('Rejected', request._id)">Reject</button></td>
             </tr>
         </tbody>
     </table>
