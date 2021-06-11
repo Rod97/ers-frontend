@@ -40,7 +40,7 @@ export class EmployeeComponent implements OnInit {
       amount: this.amount,
       reason: this.reason,
       employee_id: this.id,
-      status: 'pending'
+      status: 'Pending'
     }
 
     console.log(info);

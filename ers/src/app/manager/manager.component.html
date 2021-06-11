@@ -17,9 +17,36 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let employee of data">
+            <tr (click) = "showEmployee(employee._id)" *ngFor="let employee of data">
                 <td>{{employee._id}}</td>
                 <td>{{employee.first_name}} {{employee.last_name}}</td>
+                <!-- <td><button>Requests</button></td> -->
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Single Employee Table -->
+    <table class="center table" *ngSwitchCase="'employee'">
+        <thead class="thead-dark">
+            <tr>
+                <th>Request ID</th>
+                <th>Amount Requested</th>
+                <th>Reason</th>
+                <th>Employee Requesting</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr (click) = "showEmployee()" *ngFor="let request of data">
+                <td>{{request._id}}</td>
+                <td>{{request.amount}}</td>
+                <td>{{request.reason}}</td>
+                <td>{{request.employee_id}}</td>
+                <td>{{request.status}}</td>
+                <td id={{request._id}} *ngIf="request.status == 'Pending'"><button class="btn btn-outline-success" 
+                    (click)="resolveRequest('Accepted', request._id)">Accept</button><button class="btn btn-outline-danger"
+                    (click)="resolveRequest('Rejected', request._id)">Reject</button></td>
                 <!-- <td><button>Requests</button></td> -->
             </tr>
         </tbody>

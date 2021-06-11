@@ -10,7 +10,7 @@ export class ManagerComponent implements OnInit {
 
   constructor(private managerService: ManagerService) { }
 
-  tableView ="";
+  tableView = "";
   data = [];
 
   ngOnInit(): void {
@@ -28,34 +28,43 @@ export class ManagerComponent implements OnInit {
   }
   getAllPending() {
     this.managerService.getAllPending().subscribe((data) => {
-      if(data.success){
+      if (data.success) {
         this.data = data.data;
         this.tableView = "pending"
       }
     })
   }
-  getAllResolved(){
+  getAllResolved() {
     this.managerService.getAllResolved().subscribe((data) => {
-      if(data.success){
+      if (data.success) {
         this.data = data.data;
         this.tableView = "resolved"
       }
     })
   }
-  getAllRequestsByEmployee(id:any){
+  getAllRequestsByEmployee(id: any) {
     this.managerService.getAllRequestsByEmployee(id).subscribe((data) => {
-      if(data.success){
+      if (data.success) {
         this.data = data.data;
         this.tableView = "employeeRequests"
       }
     })
-  } 
-  resolveRequest(decision, reimbursement){
+  }
+  resolveRequest(decision, reimbursement) {
     console.log(decision, reimbursement);
-    
-    this.managerService.resolveRequest({reimbursement, decision,}).subscribe((data) =>{
-      if(data.success){
+
+    this.managerService.resolveRequest({ reimbursement, decision, }).subscribe((data) => {
+      if (data.success) {
         document.getElementById(reimbursement).innerHTML = decision
+      }
+    })
+  }
+
+  showEmployee(id) {
+    this.managerService.getAllRequestsByEmployee(id).subscribe(data => {
+      if (data.success) {
+        this.data = data.data
+        this.tableView = 'employee'
       }
     })
   }
