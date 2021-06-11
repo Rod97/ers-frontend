@@ -62,9 +62,13 @@ export class ManagerComponent implements OnInit {
 
   showEmployee(id) {
     this.managerService.getAllRequestsByEmployee(id).subscribe(data => {
-      if (data.success) {
+      if (data.success && data.data.length !== 0) {
         this.data = data.data
         this.tableView = 'employee'
+      } else {
+        alert("No requests found for employee")
+        this.data = []
+        this.tableView = ""
       }
     })
   }
