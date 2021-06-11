@@ -43,8 +43,8 @@
                 <td>{{request.amount}}</td>
                 <td>{{request.reason}}</td>
                 <td>{{request.employee_id}}</td>
-                <td id={{request._id}}><button class="btn btn-primary"
-                        (click)="resolveRequest('Accepted', request._id)">Accept</button><button class="btn btn-primary"
+                <td id={{request._id}}><button class="btn btn-outline-success"
+                        (click)="resolveRequest('Accepted', request._id)">Accept</button><button class="btn btn-outline-danger"
                         (click)="resolveRequest('Rejected', request._id)">Reject</button></td>
             </tr>
         </tbody>

@@ -6,7 +6,8 @@ div {
 
 h1{margin: 30px;}
 button{
-    margin:10px;
+    margin-left:10px;
+    margin-right:10px;
 }
 
 .first{
